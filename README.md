@@ -1,8 +1,6 @@
-Landing Page Default
+### Landing Page Default Get Started
 
-### Get Started
-
-To start develop MissClark, you have to
+To start develop, you have to
  * Install [NodeJS](https://nodejs.org/en) or [IOJS](https://iojs.org/en)
  * Install `bower`:
 	* `npm install bower -g` ,if error EACCES `sudo npm install bower -g`
