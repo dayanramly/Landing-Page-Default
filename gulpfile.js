@@ -57,7 +57,7 @@ gulp.task('images', function(){
 })
 
 gulp.task('clean', function(){
-    return del([OutputCss,OutputJs,OutputFont]);
+    return del([OutputCss,OutputJs,OutputFont,OutputImg]);
 });
 
 gulp.task('default', ['clean'], function(){
