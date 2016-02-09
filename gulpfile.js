@@ -13,11 +13,12 @@ livereload = require('gulp-livereload'),
 notify = require('gulp-notify'),
 del = require('del');
 
-var StylesCss = 'src/scss/main.scss',
+var StylesCss = 'src/scss/style.scss',
 StylesCssFiles = [StylesCss, 'src/scss/**/*.scss'],
 ImageFiles = 'src/img/*',
 CssFiles = 'src/scss/**/*.scss',
-JsFiles = 'src/scripts/**/*.js',
+JsFiles = 'src/scripts/scripts.js',
+AllJsFiles = 'src/scripts/**/*.js',
 FontFiles = 'src/fonts/**/*',
 OutputCss = 'dist/css',
 OutputJs = 'dist/scripts',
@@ -29,22 +30,30 @@ gulp.task('styles', function(){
     return sass(StylesCss, {style:'expanded', noCache:true})
     .pipe(autoprefixer('last 2 version'))
     .pipe(cssnano())
-    .pipe(rename('styles-1.0.0.min.css'))
-    .pipe(gulp.dest(OutputCss))
-    .pipe(notify({ message: 'Styles task complete' }));
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest(OutputCss));
+    // .pipe(notify({ message: 'Styles task complete' }));
 });
 // scripts
 gulp.task('scripts', function(){
     return gulp.src(JsFiles)
-    .pipe(rename('script-1.0.0.min.js'))
-    .pipe(gulp.dest(OutputJs))
-    .pipe(notify({ message: 'Scripts task complete' }));
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(include())
+    .on('error', console.log)
+    .pipe(uglify())
+    .pipe(gulp.dest(OutputJs));
+    // .pipe(notify({ message: 'Scripts task complete' }));
 });
 // fonts
 gulp.task('fonts', function(){
     return gulp.src(FontFiles)
-    .pipe(gulp.dest(OutputFont))
-    .pipe(notify({ message: 'Fonts task complete' }));
+    .pipe(gulp.dest(OutputFont));
+    // .pipe(notify({ message: 'Fonts task complete' }));
+})
+// image
+gulp.task('images', function(){
+    return gulp.src(ImageFiles)
+    .pipe(gulp.dest(OutputImg));
 })
 
 gulp.task('clean', function(){
@@ -52,10 +61,10 @@ gulp.task('clean', function(){
 });
 
 gulp.task('default', ['clean'], function(){
-    gulp.start('styles', 'scripts', 'fonts');
+    gulp.start('styles', 'scripts', 'fonts', 'images');
 });
 
 gulp.task('watch', function(){
     gulp.watch(CssFiles,['styles']);
-    gulp.watch(JsFiles,['scripts']);
+    gulp.watch(AllJsFiles,['scripts']);
 })
